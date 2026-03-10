@@ -1,6 +1,5 @@
-# Lab Report: HTTP Protocol and curl
-Student: Erasmus Exchange
-Date: March 2026
+# Assignment 01 - HTTP Protocol
+Student: Favé Xavier
 
 ## Task 1: First GET Request
 * A. The server returned data in JSON format.
@@ -20,7 +19,7 @@ Date: March 2026
 ---
 
 ## Task 4: Simulating Errors
-* J. I got a 404 status code.
+* J. I got a 404 status code : NOT FOUND .
 * K. There is a body but it's just an empty object `{}`.
 * L. The difference is the status code shows a failure and the body doesn't have the post data.
 
