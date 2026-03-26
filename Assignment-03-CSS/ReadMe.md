@@ -2,45 +2,30 @@
 
 ### 1. Why are we using `clamp()` instead of media queries?
 
-- **Fluidity:**  
-  `clamp()` allows typography to scale smoothly and continuously based on screen size (using the `vw` unit).
+We use `clamp()` because it makes the text size adapt smoothly to the screen size. Instead of jumping between sizes at specific breakpoints like with media queries, the size changes progressively thanks to `vw`.
 
-- **Cleaner Code:**  
-  With media queries, text jumps between fixed sizes at specific breakpoints, requiring multiple blocks of code.  
-  `clamp()` handles minimum, preferred, and maximum sizes in a single line.
+It’s also much cleaner, since everything is done in one line instead of writing multiple media queries.
 
 ---
 
 ### 2. Why did we use `minmax()` instead of fixed columns?
 
-- **Automatic Adaptability:**  
-  Using `repeat(auto-fit, minmax(250px, 1fr))` lets the browser automatically calculate how many columns fit in a row.  
-  The `1fr` ensures columns expand evenly to fill available space.
+Using `minmax()` with `auto-fit` lets the browser handle the layout automatically. It creates as many columns as possible depending on the available space.
 
-- **Prevents Layout Breaking:**  
-  Fixed widths (e.g., `300px`) can overflow on smaller screens.  
-  `minmax()` ensures the layout stays responsive on all devices.
+Also, it prevents layout issues on small screens. With fixed widths, elements could overflow, while `minmax()` keeps everything responsive.
 
 ---
 
 ### 3. Why is it important to implement a mobile-first website?
 
-- **Code Simplicity:**  
-  Mobile layouts are simpler (often a single column).  
-  It's easier to build from small screens up using `min-width` media queries.
+Mobile-first is easier to manage because you start with a simple layout (usually one column), then you add complexity for bigger screens.
 
-- **Performance:**  
-  Desktop-first approaches require writing complex styles, then overriding them for mobile.  
-  Mobile-first keeps CSS lighter and improves loading performance on smaller devices.
+It’s also better for performance, since you avoid writing unnecessary CSS that would later need to be overridden for mobile.
 
 ---
 
 ### 4. What happens if we remove the variables defined at the beginning?
 
-- **Loss of Design System:**  
-  Removing the `:root` variables breaks all `var(--...)` usages.  
-  The browser ignores these properties → loss of colors, spacing, and styling.
+If we remove the variables in `:root`, all the styles using `var()` won’t work anymore. So the website would lose its colors, spacing, etc.
 
-- **Difficult Maintenance:**  
-  You would need to hardcode every value manually across the CSS.  
-  Dark Mode would also stop working, since it relies on overriding these variables.
+It would also make the code much harder to maintain, because we would need to rewrite every value manually. And dark mode would stop working, since it depends on those variables.
