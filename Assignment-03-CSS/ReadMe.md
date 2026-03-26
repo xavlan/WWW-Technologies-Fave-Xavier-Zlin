@@ -26,6 +26,6 @@ It’s also better for performance, since you avoid writing unnecessary CSS that
 
 ### 4. What happens if we remove the variables defined at the beginning?
 
-If we remove the variables in `:root`, all the styles using `var()` won’t work anymore. So the website would lose its colors, spacing, etc.
+If we remove the variables in `:root`, all the styles using `var()` won’t work anymore. So the website would lose its colors, spacing, etc...
 
 It would also make the code much harder to maintain, because we would need to rewrite every value manually. And dark mode would stop working, since it depends on those variables.
