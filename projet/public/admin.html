@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechInventory — Administration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <header class="border-b border-slate-800">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+        <span class="text-lg font-semibold">TechInventory · Admin</span>
+        <div class="flex items-center gap-3">
+          <a href="/" class="text-sm text-sky-400 hover:underline">Voir le catalogue</a>
+          <button
+            type="button"
+            id="btn-logout"
+            class="hidden rounded border border-slate-600 px-3 py-1 text-sm hover:bg-slate-800"
+          >
+            Déconnexion
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-6xl px-4 py-6">
+      <div id="admin-message" class="mb-4 hidden border"></div>
+
+      <!-- Connexion JWT -->
+      <section id="admin-login" class="mx-auto max-w-md rounded-xl border border-slate-800 bg-slate-900/60 p-8">
+        <h1 class="text-xl font-semibold">Connexion</h1>
+        <p class="mt-2 text-sm text-slate-400">Comptes issus de la table <code class="rounded bg-slate-800 px-1">users</code> (JWT).</p>
+        <form id="form-login" class="mt-6 space-y-4">
+          <label class="block">
+            <span class="text-xs uppercase text-slate-500">Email</span>
+            <input
+              id="login-email"
+              type="email"
+              required
+              autocomplete="username"
+              class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-sky-500"
+            />
+          </label>
+          <label class="block">
+            <span class="text-xs uppercase text-slate-500">Mot de passe</span>
+            <input
+              id="login-password"
+              type="password"
+              required
+              autocomplete="current-password"
+              class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-sky-500"
+            />
+          </label>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-sky-600 py-2 text-sm font-medium text-white hover:bg-sky-500"
+          >
+            Se connecter
+          </button>
+        </form>
+      </section>
+
+      <!-- Dashboard CRUD -->
+      <div id="admin-dashboard" class="hidden space-y-10">
+        <section>
+          <h2 class="text-lg font-semibold">Inventaire</h2>
+          <p class="text-sm text-slate-500">Les lignes en <span class="text-amber-400">stock bas</span> utilisent le champ <code class="rounded bg-slate-800 px-1">low_stock</code>.</p>
+          <div class="mt-4 overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full min-w-[640px] text-left text-sm">
+              <thead class="bg-slate-900 text-slate-400">
+                <tr>
+                  <th class="px-2 py-2">ID</th>
+                  <th class="px-2 py-2">Nom</th>
+                  <th class="px-2 py-2">Stock</th>
+                  <th class="px-2 py-2">Alerte</th>
+                  <th class="px-2 py-2 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="rounded-xl border border-slate-800 bg-slate-900/40 p-6">
+          <h2 id="form-title" class="text-lg font-semibold">Nouveau composant</h2>
+          <form id="form-crud" class="mt-6 grid gap-4 md:grid-cols-2">
+            <input type="hidden" id="field-edit-id" value="" />
+
+            <label class="block md:col-span-2">
+              <span class="text-xs text-slate-500">Catégorie *</span>
+              <select
+                id="field-category"
+                required
+                class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"
+              ></select>
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Nom *</span>
+              <input id="field-name" required class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Slug *</span>
+              <input id="field-slug" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">SKU *</span>
+              <input id="field-sku" required class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Marque</span>
+              <input id="field-brand" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-xs text-slate-500">Description</span>
+              <textarea id="field-desc" rows="3" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm"></textarea>
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-xs text-slate-500">Spécifications (JSON) *</span>
+              <textarea id="field-specs" rows="6" class="mt-1 w-full font-mono text-xs rounded-lg border border-slate-700 bg-slate-950 px-3 py-2"></textarea>
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Prix (€) *</span>
+              <input id="field-price" type="number" min="0" step="0.01" required class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Quantité *</span>
+              <input id="field-stock" type="number" min="0" step="1" required class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block">
+              <span class="text-xs text-slate-500">Seuil stock bas</span>
+              <input id="field-low-threshold" type="number" min="0" step="1" value="5" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+            <label class="block md:col-span-2">
+              <span class="text-xs text-slate-500">URL image</span>
+              <input id="field-image" type="url" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm" />
+            </label>
+
+            <div class="flex flex-wrap gap-3 md:col-span-2">
+              <button type="submit" class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-500">
+                Enregistrer
+              </button>
+              <button type="button" id="btn-cancel-edit" class="rounded-lg border border-slate-600 px-4 py-2 text-sm hover:bg-slate-800">
+                Nouveau / annuler édition
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script src="/js/config.js"></script>
+    <script src="/js/admin.js"></script>
+  </body>
+</html>
