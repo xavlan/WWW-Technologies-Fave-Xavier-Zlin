@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin accounts only
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Categories for grouping components
+model Category {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  slug        String      @unique
+  description String?
+  components  Component[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// PC components — the core entity
+model Component {
+  id             String   @id @default(cuid())
+  name           String
+  brand          String
+  model          String
+  description    String
+  price          Decimal  @db.Decimal(10, 2)
+  stock          Int      @default(0)
+  sku            String   @unique
+  imageUrl       String?
+  specifications Json
+  isActive       Boolean  @default(true)
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([isActive])
+  @@index([price])
+  @@index([name])
+}
+
+enum Role {
+  ADMIN
+  SUPERADMIN
+}

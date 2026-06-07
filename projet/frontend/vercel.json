@@ -1,0 +1,10 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://techinventory-api.onrender.com/api/v1",
+    "NEXT_PUBLIC_APP_NAME": "TechInventory"
+  }
+}
