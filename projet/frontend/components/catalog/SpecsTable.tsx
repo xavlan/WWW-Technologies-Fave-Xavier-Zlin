@@ -12,7 +12,7 @@ export function SpecsTable({ specifications }: SpecsTableProps) {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border">
+    <div className="overflow-hidden rounded-lg border" data-testid="specifications-table">
       <table className="w-full text-sm">
         <tbody>
           {entries.map(([key, value]) => (

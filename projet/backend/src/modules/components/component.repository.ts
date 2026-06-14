@@ -39,9 +39,9 @@ function buildWhereClause(filters: ComponentFilters): Prisma.ComponentWhereInput
 
   if (filters.search) {
     where.OR = [
-      { name: { contains: filters.search } },
-      { brand: { contains: filters.search } },
-      { description: { contains: filters.search } },
+      { name: { contains: filters.search, mode: 'insensitive' } },
+      { brand: { contains: filters.search, mode: 'insensitive' } },
+      { description: { contains: filters.search, mode: 'insensitive' } },
     ];
   }
 

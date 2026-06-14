@@ -34,6 +34,7 @@ export function SearchBar({
         placeholder={placeholder}
         className="pl-9"
         aria-label="Search components"
+        data-testid="search-input"
       />
     </div>
   );

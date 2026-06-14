@@ -85,13 +85,21 @@ export function CatalogClient({ categories }: CatalogClientProps) {
       {isLoading ? (
         <ProductGridSkeleton />
       ) : components.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-center">
+        <div
+          className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-center"
+          data-testid="empty-state"
+        >
           <PackageOpen className="mb-4 h-12 w-12 text-muted-foreground" />
           <h2 className="text-lg font-semibold">No components found</h2>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
             Try adjusting your search or filters to find what you are looking for.
           </p>
-          <Button className="mt-6" variant="outline" onClick={resetFilters}>
+          <Button
+            className="mt-6"
+            variant="outline"
+            onClick={resetFilters}
+            data-testid="reset-filters-button"
+          >
             Reset filters
           </Button>
         </div>

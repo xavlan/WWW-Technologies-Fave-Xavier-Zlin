@@ -41,7 +41,7 @@ export function AdminLoginForm() {
       router.refresh();
     } catch (error: unknown) {
       const apiError = error as { response?: { data?: { error?: { message?: string } } } };
-      setErrorMessage(apiError.response?.data?.error?.message ?? 'Invalid email or password');
+      setErrorMessage(apiError.response?.data?.error?.message ?? 'Invalid credentials');
     } finally {
       setIsSubmitting(false);
     }
@@ -51,12 +51,15 @@ export function AdminLoginForm() {
     <Card className="w-full max-w-md shadow-md">
       <CardHeader>
         <CardTitle>Admin Login</CardTitle>
-        <CardDescription>Sign in to manage inventory and categories.</CardDescription>
+        <CardDescription>Sign in to manage inventory.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {errorMessage && (
-            <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <div
+              className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+              data-testid="error-alert"
+            >
               {errorMessage}
             </div>
           )}
@@ -64,7 +67,11 @@ export function AdminLoginForm() {
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" autoComplete="email" {...register('email')} />
-            {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-sm text-destructive" data-testid="email-error">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -76,7 +83,9 @@ export function AdminLoginForm() {
               {...register('password')}
             />
             {errors.password && (
-              <p className="text-sm text-destructive">{errors.password.message}</p>
+              <p className="text-sm text-destructive" data-testid="password-error">
+                {errors.password.message}
+              </p>
             )}
           </div>
 

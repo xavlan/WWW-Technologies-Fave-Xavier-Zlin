@@ -17,7 +17,7 @@ interface ComponentFormPageClientProps {
 function getApiError(error: unknown): { message: string; code?: string } {
   const err = error as { response?: { data?: { error?: { message?: string; code?: string } } } };
   return {
-    message: err.response?.data?.error?.message ?? 'Something went wrong',
+    message: err.response?.data?.error?.message ?? 'Request failed',
     code: err.response?.data?.error?.code,
   };
 }
@@ -46,10 +46,10 @@ export function ComponentFormPageClient({ categories, component }: ComponentForm
     try {
       if (isEdit && component) {
         await componentsApi.update(component.id, payload);
-        toast.success('Component updated');
+        toast.success('Component updated successfully');
       } else {
         await componentsApi.create(payload);
-        toast.success('Component created');
+        toast.success('Component created successfully');
       }
       router.push('/admin/inventory');
     } catch (error: unknown) {

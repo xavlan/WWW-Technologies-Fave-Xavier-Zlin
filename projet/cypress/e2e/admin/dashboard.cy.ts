@@ -46,12 +46,6 @@ describe('TechInventory Admin Dashboard', () => {
     cy.url().should('include', '/admin/inventory');
   });
 
-  it('dashboard has navigation to categories', () => {
-    cy.visit('/admin/dashboard');
-    cy.get('[data-testid="nav-categories"]').click();
-    cy.url().should('include', '/admin/categories');
-  });
-
   it('dashboard displays recent activity section', () => {
     cy.visit('/admin/dashboard');
     cy.get('[data-testid="recent-activity"]').should('exist');

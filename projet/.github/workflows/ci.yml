@@ -87,7 +87,7 @@ jobs:
         run: |
           cd backend
           echo "DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test" > .env.test
-          echo "JWT_SECRET=test-secret-key-for-testing" >> .env.test
+          echo "JWT_SECRET=test-secret-key-for-testing-min-32-chars" >> .env.test
           echo "JWT_EXPIRES_IN=1h" >> .env.test
           echo "PORT=3001" >> .env.test
           echo "NODE_ENV=test" >> .env.test
@@ -188,7 +188,7 @@ jobs:
         run: |
           cd backend
           echo "DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test" > .env.test
-          echo "JWT_SECRET=test-secret-key-for-testing" >> .env.test
+          echo "JWT_SECRET=test-secret-key-for-testing-min-32-chars" >> .env.test
           echo "JWT_EXPIRES_IN=1h" >> .env.test
           echo "PORT=3001" >> .env.test
           echo "NODE_ENV=test" >> .env.test
@@ -220,7 +220,7 @@ jobs:
           npm start &
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
-          JWT_SECRET: test-secret-key-for-testing
+          JWT_SECRET: test-secret-key-for-testing-min-32-chars
           JWT_EXPIRES_IN: 1h
           PORT: 3001
           NODE_ENV: test

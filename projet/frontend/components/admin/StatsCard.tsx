@@ -8,6 +8,7 @@ interface StatsCardProps {
   description?: string;
   icon: LucideIcon;
   variant?: 'default' | 'warning' | 'danger';
+  testId?: string;
 }
 
 const variantStyles = {
@@ -22,9 +23,10 @@ export function StatsCard({
   description,
   icon: Icon,
   variant = 'default',
+  testId,
 }: StatsCardProps) {
   return (
-    <Card>
+    <Card data-testid={testId ?? 'stats-card'}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
         <Icon className={cn('h-5 w-5', variantStyles[variant])} />

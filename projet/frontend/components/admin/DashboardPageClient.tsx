@@ -21,6 +21,8 @@ export function DashboardPageClient() {
       try {
         const response = await adminApi.getStats();
         setStats(response.data.data ?? null);
+      } catch {
+        setStats(null);
       } finally {
         setIsLoading(false);
       }
@@ -43,48 +45,63 @@ export function DashboardPageClient() {
   }
 
   if (!stats) {
-    return <p className="text-muted-foreground">Unable to load dashboard statistics.</p>;
+    return <p className="text-muted-foreground">Could not load dashboard stats.</p>;
   }
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight" data-testid="dashboard-title">
+          Dashboard
+        </h1>
         <p className="text-muted-foreground">Overview of your inventory performance.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatsCard title="Total Components" value={stats.totalComponents} icon={Package} />
-        <StatsCard title="Total Value" value={`$${stats.totalInventoryValue}`} icon={DollarSign} />
+        <StatsCard
+          title="Total Components"
+          value={stats.totalComponents}
+          icon={Package}
+          testId="total-components-stat"
+        />
+        <StatsCard
+          title="Total Value"
+          value={`$${stats.totalInventoryValue}`}
+          icon={DollarSign}
+          testId="total-value-stat"
+        />
         <StatsCard
           title="Low Stock Items"
           value={stats.lowStockCount}
           icon={AlertTriangle}
           variant="warning"
+          testId="low-stock-stat"
         />
         <StatsCard
           title="Out of Stock"
           value={stats.outOfStockCount}
           icon={XCircle}
           variant="danger"
+          testId="out-of-stock-stat"
         />
       </div>
 
-      <section className="space-y-4">
+      <section className="space-y-4" data-testid="recent-activity">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Low Stock Alerts</h2>
           <Link
-            href="/admin/inventory"
-            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            href="/admin/inventory/new"
+            className={cn(buttonVariants({ size: 'sm' }))}
+            data-testid="quick-add-component"
           >
-            View inventory
+            Add component
           </Link>
         </div>
 
         {stats.lowStockComponents.length === 0 ? (
           <p className="text-sm text-muted-foreground">All items are well stocked.</p>
         ) : (
-          <div className="overflow-hidden rounded-xl border">
+          <div className="overflow-hidden rounded-xl border" data-testid="low-stock-alert-list">
             <table className="w-full text-sm">
               <thead className="bg-muted/50">
                 <tr>
@@ -97,8 +114,15 @@ export function DashboardPageClient() {
               </thead>
               <tbody>
                 {stats.lowStockComponents.map((component) => (
-                  <tr key={component.id} className="border-t">
-                    <td className="px-4 py-3">{component.name}</td>
+                  <tr key={component.id} className="border-t" data-testid="low-stock-item">
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/admin/inventory/${component.id}/edit`}
+                        className="font-medium hover:underline"
+                      >
+                        {component.name}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3">{component.sku}</td>
                     <td className="px-4 py-3">{component.stock}</td>
                     <td className="px-4 py-3">${component.price}</td>

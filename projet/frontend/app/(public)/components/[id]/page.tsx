@@ -55,8 +55,8 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <nav className="mb-6 text-sm text-muted-foreground">
-        <Link href="/" className="hover:text-foreground">
+      <nav className="mb-6 text-sm text-muted-foreground" data-testid="breadcrumb">
+        <Link href="/" className="hover:text-foreground" data-testid="breadcrumb-home">
           Home
         </Link>
         <span className="mx-2">/</span>
@@ -68,7 +68,10 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <div className="relative aspect-square overflow-hidden rounded-xl border bg-muted">
+        <div
+          className="relative aspect-square overflow-hidden rounded-xl border bg-muted"
+          data-testid="component-image"
+        >
           <ComponentImage
             src={component.imageUrl}
             alt={component.name}
@@ -81,17 +84,31 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
         <div className="space-y-6">
           <div>
             <div className="mb-3 flex flex-wrap gap-2">
-              <Badge variant="outline">{component.brand}</Badge>
-              {component.category && <Badge variant="secondary">{component.category.name}</Badge>}
-              <StockBadge status={stockStatus} />
+              <Badge variant="outline" data-testid="component-brand">
+                {component.brand}
+              </Badge>
+              {component.category && (
+                <Badge variant="secondary" data-testid="component-category">
+                  {component.category.name}
+                </Badge>
+              )}
+              <StockBadge status={stockStatus} data-testid="component-stock" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight">{component.name}</h1>
-            <p className="mt-2 text-muted-foreground">{component.model}</p>
+            <h1 className="text-3xl font-bold tracking-tight" data-testid="component-name">
+              {component.name}
+            </h1>
+            <p className="mt-2 text-muted-foreground" data-testid="component-model">
+              {component.model}
+            </p>
           </div>
 
           <div>
-            <p className="text-3xl font-bold text-primary">${component.price}</p>
-            <p className="mt-1 text-sm text-muted-foreground">SKU: {component.sku}</p>
+            <p className="text-3xl font-bold text-primary" data-testid="component-price">
+              ${component.price}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground" data-testid="component-sku">
+              SKU: {component.sku}
+            </p>
             <p className="text-sm text-muted-foreground">
               {component.stock > 0
                 ? `${component.stock} unit(s) available`
@@ -101,7 +118,12 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
 
           <div>
             <h2 className="mb-2 text-lg font-semibold">Description</h2>
-            <p className="leading-relaxed text-muted-foreground">{component.description}</p>
+            <p
+              className="leading-relaxed text-muted-foreground"
+              data-testid="component-description"
+            >
+              {component.description}
+            </p>
           </div>
 
           <ComponentDetailClient
@@ -110,7 +132,11 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
             categorySlug={component.category?.slug}
           />
 
-          <Link href="/components" className={cn(buttonVariants({ variant: 'outline' }))}>
+          <Link
+            href="/components"
+            className={cn(buttonVariants({ variant: 'outline' }))}
+            data-testid="back-to-catalog-link"
+          >
             Back to catalog
           </Link>
         </div>

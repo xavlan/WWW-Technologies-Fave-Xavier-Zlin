@@ -14,7 +14,8 @@ describe('TechInventory Public Catalog', () => {
   });
 
   it('category filter shows only matching components', () => {
-    cy.get('[data-testid="category-select"]').select('CPU');
+    cy.get('[data-testid="category-select"]').click();
+    cy.contains('[role="option"]', 'CPU').click();
     cy.url().should('include', 'category=cpu');
     cy.get('[data-testid="product-card"]').should('exist');
   });
@@ -33,7 +34,8 @@ describe('TechInventory Public Catalog', () => {
 
   it('combining multiple filters works', () => {
     cy.get('[data-testid="search-input"]').type('Intel');
-    cy.get('[data-testid="category-select"]').select('CPU');
+    cy.get('[data-testid="category-select"]').click();
+    cy.contains('[role="option"]', 'CPU').click();
     cy.get('[data-testid="min-price-input"]').type('200');
     cy.url().should('include', 'search=Intel');
     cy.url().should('include', 'category=cpu');

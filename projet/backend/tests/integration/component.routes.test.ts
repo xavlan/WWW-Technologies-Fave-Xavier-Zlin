@@ -3,8 +3,8 @@ import request from 'supertest';
 import { createApp } from '../../src/app';
 import { ComponentService } from '../../src/modules/components/component.service';
 import { NotFoundError, ConflictError } from '../../src/utils/errors';
+import { getAdminAuthHeader } from '../helpers/auth';
 
-// Mock the service
 jest.mock('../../src/modules/components/component.service');
 
 const mockComponentService = ComponentService as jest.MockedClass<typeof ComponentService>;
@@ -156,7 +156,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .post('/api/v1/components')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .send({
           name: 'Intel Core i9-13900K',
           brand: 'Intel',
@@ -191,7 +191,7 @@ describe('Component Routes Integration Tests', () => {
     it('should return 400 with invalid body', async () => {
       const response = await request(app)
         .post('/api/v1/components')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .send({
           name: 'A',
         })
@@ -208,7 +208,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .post('/api/v1/components')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .send({
           name: 'Intel Core i9-13900K',
           brand: 'Intel',
@@ -240,7 +240,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .put('/api/v1/components/1')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .send({
           price: 549.99,
         })
@@ -268,7 +268,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .put('/api/v1/components/nonexistent')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .send({ price: 549.99 })
         .expect(404);
 
@@ -285,7 +285,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .delete('/api/v1/components/1')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .expect(200);
 
       expect(response.body).toEqual({
@@ -309,7 +309,7 @@ describe('Component Routes Integration Tests', () => {
 
       const response = await request(app)
         .delete('/api/v1/components/nonexistent')
-        .set('Authorization', 'Bearer valid-admin-token')
+        .set(getAdminAuthHeader())
         .expect(404);
 
       expect(response.body.success).toBe(false);

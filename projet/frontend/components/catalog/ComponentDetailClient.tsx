@@ -40,7 +40,7 @@ export function ComponentDetailClient({
         });
         setComponentsInCategory(response.data.data.filter((c) => c.id !== componentId));
       } catch {
-        console.error('Failed to load components');
+        // comparison picker is optional
       }
     }
 

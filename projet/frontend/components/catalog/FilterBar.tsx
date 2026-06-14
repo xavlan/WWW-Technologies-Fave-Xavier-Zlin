@@ -35,7 +35,7 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
             ...categories.map((category) => ({ value: category.slug, label: category.name })),
           ]}
         >
-          <SelectTrigger id="category-filter" className="w-full">
+          <SelectTrigger id="category-filter" className="w-full" data-testid="category-select">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
@@ -57,6 +57,7 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
           min={0}
           placeholder="0"
           value={params.minPrice ?? ''}
+          data-testid="min-price-input"
           onChange={(event) =>
             onUpdate({
               minPrice: event.target.value ? Number(event.target.value) : undefined,
@@ -73,6 +74,7 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
           min={0}
           placeholder="Any"
           value={params.maxPrice ?? ''}
+          data-testid="max-price-input"
           onChange={(event) =>
             onUpdate({
               maxPrice: event.target.value ? Number(event.target.value) : undefined,
@@ -121,12 +123,18 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
           <input
             type="checkbox"
             checked={params.inStock === true}
+            data-testid="in-stock-toggle"
             onChange={(event) => onUpdate({ inStock: event.target.checked ? true : undefined })}
             className="h-4 w-4 rounded border-input"
           />
           In stock only
         </label>
-        <Button type="button" variant="outline" onClick={onReset}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onReset}
+          data-testid="clear-filters-button"
+        >
           Reset filters
         </Button>
       </div>

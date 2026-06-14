@@ -116,7 +116,9 @@ export function InventoryPageClient() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Inventory</h1>
+          <h1 className="text-3xl font-bold tracking-tight" data-testid="inventory-title">
+            Inventory
+          </h1>
           <p className="text-muted-foreground">Manage PC component inventory.</p>
         </div>
         <Link
