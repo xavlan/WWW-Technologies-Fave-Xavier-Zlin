@@ -212,11 +212,30 @@ jobs:
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
 
-      - name: Start backend server
+      - name: Build apps for E2E
         run: |
-          npm run build
-          npm start &
-        working-directory: projet/backend
+          npm run build --prefix backend
+          npm run build --prefix frontend
+        working-directory: projet
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+          NEXT_PUBLIC_APP_NAME: TechInventory
+
+      - name: Run E2E tests
+        run: |
+          npm start --prefix backend &
+          BACKEND_PID=$!
+          npm start --prefix frontend &
+          FRONTEND_PID=$!
+
+          cleanup() {
+            kill $BACKEND_PID $FRONTEND_PID 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          npx wait-on -t 120000 http://localhost:3001/health http://localhost:3000
+          npx cypress run
+        working-directory: projet
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
           JWT_SECRET: test-secret-key-for-testing-min-32-chars
@@ -224,24 +243,8 @@ jobs:
           PORT: 3001
           NODE_ENV: test
           CORS_ORIGIN: http://localhost:3000
-
-      - name: Start frontend dev server
-        run: npm run dev &
-        working-directory: projet/frontend
-        env:
           NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
           NEXT_PUBLIC_APP_NAME: TechInventory
-
-      - name: Wait for servers to be ready
-        run: |
-          npx wait-on http://localhost:3001
-          npx wait-on http://localhost:3000
-        working-directory: projet
-
-      - name: Run Cypress tests
-        run: npx cypress run
-        working-directory: projet
-        env:
           CYPRESS_baseUrl: http://localhost:3000
           CYPRESS_apiUrl: http://localhost:3001/api/v1
 
