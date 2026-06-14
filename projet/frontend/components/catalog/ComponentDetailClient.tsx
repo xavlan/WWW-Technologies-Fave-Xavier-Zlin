@@ -21,13 +21,9 @@ export function ComponentDetailClient({
 }: ComponentDetailClientProps) {
   const router = useRouter();
   const { isFavorite, addFavorite, removeFavorite } = useFavoritesStore();
-  const [favorite, setFavorite] = useState(false);
+  const favorite = isFavorite(componentId);
   const [componentsInCategory, setComponentsInCategory] = useState<Component[]>([]);
   const [showComparison, setShowComparison] = useState(false);
-
-  useEffect(() => {
-    setFavorite(isFavorite(componentId));
-  }, [componentId, isFavorite]);
 
   useEffect(() => {
     if (!categorySlug) return;
@@ -44,7 +40,7 @@ export function ComponentDetailClient({
       }
     }
 
-    loadComponents();
+    void loadComponents();
   }, [categorySlug, componentId]);
 
   const handleFavorite = () => {
@@ -53,7 +49,6 @@ export function ComponentDetailClient({
     } else {
       addFavorite(componentId);
     }
-    setFavorite(!favorite);
   };
 
   const handleCompare = (otherId: string) => {
@@ -62,7 +57,7 @@ export function ComponentDetailClient({
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         <Button
           variant={favorite ? 'default' : 'outline'}
           onClick={handleFavorite}
@@ -85,7 +80,7 @@ export function ComponentDetailClient({
       </div>
 
       {showComparison && componentsInCategory.length > 0 && (
-        <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+        <div className="space-y-3 rounded-lg border bg-muted/30 p-4">
           <p className="text-sm font-medium">Select a component to compare with {componentName}:</p>
           <div className="grid gap-2">
             {componentsInCategory.slice(0, 5).map((comp) => (
@@ -93,7 +88,7 @@ export function ComponentDetailClient({
                 key={comp.id}
                 variant="outline"
                 onClick={() => handleCompare(comp.id)}
-                className="justify-start text-left h-auto py-2"
+                className="h-auto justify-start py-2 text-left"
               >
                 <div>
                   <p className="font-medium">{comp.name}</p>
@@ -105,7 +100,7 @@ export function ComponentDetailClient({
             ))}
           </div>
           {componentsInCategory.length > 5 && (
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-center text-xs text-muted-foreground">
               Showing 5 of {componentsInCategory.length} components
             </p>
           )}

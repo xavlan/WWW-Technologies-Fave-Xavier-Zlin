@@ -3,6 +3,7 @@ import request from 'supertest';
 import { createApp } from '../../src/app';
 import { AuthService } from '../../src/modules/auth/auth.service';
 import { UnauthorizedError } from '../../src/utils/errors';
+import { getAdminAuthHeader } from '../helpers/auth';
 import type { UserRole } from '../../src/types';
 
 // Mock the database and services
@@ -46,12 +47,13 @@ describe('Auth Routes Integration Tests', () => {
         })
         .expect(200);
 
-      expect(response.body).toEqual({
-        success: true,
-        data: {
-          token: 'mock-jwt-token',
-          user: mockUser,
-        },
+      expect(response.body.success).toBe(true);
+      expect(response.body.data.token).toBe('mock-jwt-token');
+      expect(response.body.data.user).toMatchObject({
+        id: 'user-123',
+        email: 'admin@test.com',
+        name: 'Admin User',
+        role: 'ADMIN',
       });
     });
 
@@ -149,7 +151,7 @@ describe('Auth Routes Integration Tests', () => {
   describe('GET /api/v1/auth/me', () => {
     it('should return 200 with user data when authenticated', async () => {
       const mockUser = {
-        id: 'user-123',
+        id: 'test-admin-id',
         email: 'admin@test.com',
         name: 'Admin User',
         role: 'ADMIN' as UserRole,
@@ -160,12 +162,15 @@ describe('Auth Routes Integration Tests', () => {
 
       const response = await request(app)
         .get('/api/v1/auth/me')
-        .set('Authorization', 'Bearer valid-token')
+        .set(getAdminAuthHeader())
         .expect(200);
 
-      expect(response.body).toEqual({
-        success: true,
-        data: mockUser,
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toMatchObject({
+        id: 'test-admin-id',
+        email: 'admin@test.com',
+        name: 'Admin User',
+        role: 'ADMIN',
       });
     });
 

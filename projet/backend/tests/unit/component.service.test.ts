@@ -5,6 +5,14 @@ import { ConflictError } from '../../src/utils/errors';
 // Mock dependencies
 jest.mock('../../src/modules/components/component.repository');
 jest.mock('../../src/utils/pagination');
+jest.mock('../../src/utils/serialize');
+jest.mock('../../src/config/database', () => ({
+  prisma: {
+    category: {
+      findUnique: jest.fn().mockResolvedValue({ id: 'cat-1' }),
+    },
+  },
+}));
 
 import { componentRepository } from '../../src/modules/components/component.repository';
 import { buildPaginationMeta, parsePagination } from '../../src/utils/pagination';
@@ -197,6 +205,7 @@ describe('ComponentService', () => {
         stock: 10,
         sku: 'SKU-123',
         categoryId: 'cat-1',
+        imageUrl: null,
         specifications: {},
       };
       const mockComponent = { id: '1', ...mockData };
@@ -222,6 +231,7 @@ describe('ComponentService', () => {
         stock: 10,
         sku: 'EXISTING-SKU',
         categoryId: 'cat-1',
+        imageUrl: null,
         specifications: {},
       };
 

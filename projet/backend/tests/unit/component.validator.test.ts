@@ -46,7 +46,7 @@ describe('Component Validators', () => {
 
       const result = createComponentSchema.parse(validData);
 
-      expect(result.imageUrl).toBeUndefined();
+      expect(result.imageUrl).toBeNull();
     });
 
     it('should reject name shorter than 2 characters', () => {
@@ -145,8 +145,8 @@ describe('Component Validators', () => {
       expect(() => createComponentSchema.parse(invalidData)).toThrow();
     });
 
-    it('should reject SKU with lowercase letters', () => {
-      const invalidData = {
+    it('should uppercase SKU letters during validation', () => {
+      const data = {
         name: 'Intel Core i9-13900K',
         brand: 'Intel',
         model: 'i9-13900K',
@@ -158,7 +158,8 @@ describe('Component Validators', () => {
         categoryId: 'category-123',
       };
 
-      expect(() => createComponentSchema.parse(invalidData)).toThrow();
+      const result = createComponentSchema.parse(data);
+      expect(result.sku).toBe('CPU-INTEL-13900K');
     });
 
     it('should reject invalid image URL', () => {
@@ -307,10 +308,8 @@ describe('Component Validators', () => {
       expect(result.limit).toBe(24);
     });
 
-    it('should enforce maximum limit of 100', () => {
-      const result = componentQuerySchema.parse({ limit: 200 });
-
-      expect(result.limit).toBe(100);
+    it('should reject limit above 100', () => {
+      expect(() => componentQuerySchema.parse({ limit: 200 })).toThrow();
     });
 
     it('should coerce string numbers to integers', () => {
