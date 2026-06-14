@@ -1,8 +1,17 @@
 import rateLimit from 'express-rate-limit';
+import type { Request } from 'express';
 import { env } from '../config/env';
 
 const isDevelopment = env.NODE_ENV === 'development';
 const isTest = env.NODE_ENV === 'test';
+
+function clientIp(req: Request): string {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string' && forwarded.length > 0) {
+    return forwarded.split(',')[0]?.trim() ?? req.ip ?? 'unknown';
+  }
+  return req.ip ?? 'unknown';
+}
 
 export const rateLimiter = rateLimit({
   windowMs: env.RATE_LIMIT_WINDOW_MS,
@@ -10,6 +19,7 @@ export const rateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skip: () => isDevelopment || isTest,
+  keyGenerator: clientIp,
   message: {
     success: false,
     error: {

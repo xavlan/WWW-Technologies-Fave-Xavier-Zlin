@@ -101,8 +101,14 @@ export function InventoryPageClient() {
     setIsDeleting(true);
 
     try {
-      await componentsApi.delete(deleteTarget.id);
-      toast.success('Component deleted');
+      const deletedId = deleteTarget.id;
+      await componentsApi.delete(deletedId);
+      setComponents((current) => current.filter((component) => component.id !== deletedId));
+      setMeta((current) => ({
+        ...current,
+        total: Math.max(0, current.total - 1),
+      }));
+      toast.success('Component removed from catalog');
       setDeleteTarget(null);
       setRefreshToken((token) => token + 1);
     } catch {

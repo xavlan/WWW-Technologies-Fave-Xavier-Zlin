@@ -147,24 +147,21 @@ describe('ComponentService', () => {
       );
     });
 
-    it('should include inactive components for admin', async () => {
+    it('should exclude inactive components from admin inventory list', async () => {
       mockParsePagination.mockReturnValue({ page: 1, limit: 12 });
       mockRepository.findAll.mockResolvedValue({ items: [], total: 0 });
       mockSerializeComponents.mockReturnValue([]);
       mockBuildPaginationMeta.mockReturnValue({ page: 1, limit: 12, total: 0, totalPages: 0 });
 
-      await componentService.getAll(
-        {
+      await componentService.getAll({
           page: 1,
           limit: 12,
           sortBy: 'createdAt',
           order: 'desc',
-        },
-        { isAdmin: true },
-      );
+        });
 
       expect(mockRepository.findAll).toHaveBeenCalledWith(
-        expect.objectContaining({ includeInactive: true }),
+        expect.objectContaining({ includeInactive: false }),
         expect.any(Object),
         expect.any(Object),
       );

@@ -1,9 +1,13 @@
 # TechInventory
 
-School project — PC component catalog with admin panel.
+Erasmus UTB project — PC component catalog with admin panel.
 
-**Live site:** [techinventory.vercel.app](https://techinventory.vercel.app)  
-**API:** [techinventory-api.onrender.com](https://techinventory-api.onrender.com/api/v1)
+
+
+**Live site:** [techinventory.vercel.app](https://techinventory-six.vercel.app/)  
+**API:** [techinventory-api.onrender.com](https://techinventory-4ocd.onrender.com/api/v1)
+
+
 
 ## Stack
 
@@ -41,8 +45,6 @@ git commit -m "your message"
 git push origin main
 ```
 
-Wait 2–5 min for Vercel (frontend) and Render (backend). See `DEPLOYMENT.md` for first-time setup.
-
 ## Project structure
 
 ```
@@ -50,12 +52,3 @@ frontend/     Next.js app (catalog, admin, compare, favorites, PC builder)
 backend/      Express API + Prisma
 cypress/      E2E tests
 ```
-
-## Scripts
-
-| Command | Where | What |
-|---------|-------|------|
-| `npm run dev` | frontend / backend | Dev server |
-| `npm run build` | both | Production build |
-| `npm run test` | backend | Jest tests |
-| `npm run cypress:open` | root | E2E tests |

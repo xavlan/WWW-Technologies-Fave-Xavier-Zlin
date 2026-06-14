@@ -12,7 +12,7 @@ import type {
 export class ComponentService {
   constructor(private readonly repository = componentRepository) {}
 
-  async getAll(query: ComponentQueryInput, options: { isAdmin?: boolean } = {}) {
+  async getAll(query: ComponentQueryInput) {
     const { page, limit } = parsePagination(query.page, query.limit);
 
     const { items, total } = await this.repository.findAll(
@@ -22,7 +22,7 @@ export class ComponentService {
         minPrice: query.minPrice,
         maxPrice: query.maxPrice,
         inStock: query.inStock,
-        includeInactive: options.isAdmin === true,
+        includeInactive: false,
       },
       { page, limit },
       { sortBy: query.sortBy, order: query.order },

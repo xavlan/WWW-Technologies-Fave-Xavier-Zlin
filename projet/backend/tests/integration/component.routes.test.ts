@@ -56,7 +56,6 @@ describe('Component Routes Integration Tests', () => {
 
       expect(mockComponentService.prototype.getAll).toHaveBeenCalledWith(
         expect.objectContaining({ search: 'GPU' }),
-        expect.any(Object),
       );
     });
 
@@ -72,7 +71,6 @@ describe('Component Routes Integration Tests', () => {
 
       expect(mockComponentService.prototype.getAll).toHaveBeenCalledWith(
         expect.objectContaining({ category: 'cpu' }),
-        expect.any(Object),
       );
     });
 
@@ -88,7 +86,6 @@ describe('Component Routes Integration Tests', () => {
 
       expect(mockComponentService.prototype.getAll).toHaveBeenCalledWith(
         expect.objectContaining({ page: 2, limit: 24 }),
-        expect.any(Object),
       );
     });
 
@@ -104,7 +101,6 @@ describe('Component Routes Integration Tests', () => {
 
       expect(mockComponentService.prototype.getAll).toHaveBeenCalledWith(
         expect.objectContaining({ sortBy: 'price', order: 'asc' }),
-        expect.any(Object),
       );
     });
   });

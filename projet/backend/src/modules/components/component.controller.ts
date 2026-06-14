@@ -9,9 +9,7 @@ function isAdminRequest(req: Request): boolean {
 export class ComponentController {
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const result = await componentService.getAll(req.query as unknown as ComponentQueryInput, {
-        isAdmin: isAdminRequest(req),
-      });
+      const result = await componentService.getAll(req.query as unknown as ComponentQueryInput);
 
       res.status(200).json({
         success: true,

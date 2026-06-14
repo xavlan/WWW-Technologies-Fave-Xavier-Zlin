@@ -9,7 +9,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   CORS_ORIGIN: z.string().url('CORS_ORIGIN must be a valid URL'),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(900_000),
-  RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
+  RATE_LIMIT_MAX: z.coerce.number().int().positive().default(300),
 });
 
 export type Env = z.infer<typeof envSchema>;

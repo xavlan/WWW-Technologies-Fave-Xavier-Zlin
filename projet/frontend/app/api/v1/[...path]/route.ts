@@ -24,6 +24,14 @@ async function proxyRequest(request: NextRequest, pathSegments: string[]): Promi
     headers.Authorization = `Bearer ${token}`;
   }
 
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const realIp = request.headers.get('x-real-ip');
+  if (forwardedFor) {
+    headers['X-Forwarded-For'] = forwardedFor;
+  } else if (realIp) {
+    headers['X-Forwarded-For'] = realIp;
+  }
+
   const hasBody = !['GET', 'HEAD'].includes(request.method);
   const body = hasBody ? await request.text() : undefined;
 

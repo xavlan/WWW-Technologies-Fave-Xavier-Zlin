@@ -10,6 +10,10 @@ import { apiRouter } from './routes';
 export function createApp(): Application {
   const app = express();
 
+  if (env.NODE_ENV !== 'test') {
+    app.set('trust proxy', 1);
+  }
+
   app.use(helmet());
   app.use(
     cors({
