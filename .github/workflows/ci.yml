@@ -12,10 +12,6 @@ on:
       - 'projet/**'
       - '.github/workflows/**'
 
-defaults:
-  run:
-    working-directory: projet
-
 jobs:
   lint:
     name: Lint
