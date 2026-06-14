@@ -223,30 +223,41 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          (
-            DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test \
-            JWT_SECRET=test-secret-key-for-testing-min-32-chars \
-            JWT_EXPIRES_IN=1h \
-            PORT=3001 \
-            NODE_ENV=test \
-            CORS_ORIGIN=http://localhost:3000 \
-            npm start --prefix backend
-          ) &
-          BACKEND_PID=$!
+          fuser -k 3000/tcp 2>/dev/null || true
+          fuser -k 3001/tcp 2>/dev/null || true
 
-          PORT=3000 npm start --prefix frontend &
+          cd backend
+          DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test \
+          JWT_SECRET=test-secret-key-for-testing-min-32-chars \
+          JWT_EXPIRES_IN=1h \
+          PORT=3001 \
+          NODE_ENV=test \
+          CORS_ORIGIN=http://localhost:3000 \
+          node dist/server.js > ../backend.log 2>&1 &
+          BACKEND_PID=$!
+          cd ..
+
+          cd frontend
+          npx next start -p 3000 -H 127.0.0.1 > ../frontend.log 2>&1 &
           FRONTEND_PID=$!
+          cd ..
 
           cleanup() {
             kill $BACKEND_PID $FRONTEND_PID 2>/dev/null || true
           }
           trap cleanup EXIT
 
-          npx wait-on -t 120000 http://localhost:3001/health http://localhost:3000
-          npx cypress run
+          npx wait-on -t 120000 http://localhost:3001/health http://127.0.0.1:3000
+          npx cypress run || {
+            echo "=== backend.log ==="
+            cat backend.log || true
+            echo "=== frontend.log ==="
+            cat frontend.log || true
+            exit 1
+          }
         working-directory: projet
         env:
-          CYPRESS_baseUrl: http://localhost:3000
+          CYPRESS_baseUrl: http://127.0.0.1:3000
           CYPRESS_apiUrl: http://localhost:3001/api/v1
 
       - name: Upload Cypress screenshots
