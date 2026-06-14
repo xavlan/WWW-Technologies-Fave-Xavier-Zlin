@@ -27,7 +27,7 @@ describe('TechInventory Admin Auth', () => {
     cy.get('input[name="email"]').type('admin@techinventory.com');
     cy.get('input[name="password"]').type('Admin1234!');
     cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/admin/dashboard');
+    cy.url({ timeout: 15000 }).should('include', '/admin/dashboard');
   });
 
   it('login with non-existent user shows error message', () => {

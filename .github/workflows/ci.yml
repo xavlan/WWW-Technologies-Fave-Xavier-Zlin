@@ -238,7 +238,11 @@ jobs:
           cd ..
 
           cd frontend
-          npx next start -p 3000 -H 127.0.0.1 > ../frontend.log 2>&1 &
+          JWT_SECRET=test-secret-key-for-testing-min-32-chars \
+          JWT_EXPIRES_IN=1h \
+          NODE_ENV=test \
+          NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1 \
+          npx next start -p 3000 -H localhost > ../frontend.log 2>&1 &
           FRONTEND_PID=$!
           cd ..
 
@@ -247,7 +251,7 @@ jobs:
           }
           trap cleanup EXIT
 
-          npx wait-on -t 120000 http://localhost:3001/health http://127.0.0.1:3000
+          npx wait-on -t 120000 http://localhost:3001/health http://localhost:3000
           npx cypress run || {
             echo "=== backend.log ==="
             cat backend.log || true
@@ -257,7 +261,7 @@ jobs:
           }
         working-directory: projet
         env:
-          CYPRESS_baseUrl: http://127.0.0.1:3000
+          CYPRESS_baseUrl: http://localhost:3000
           CYPRESS_apiUrl: http://localhost:3001/api/v1
 
       - name: Upload Cypress screenshots

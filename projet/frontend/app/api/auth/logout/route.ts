@@ -9,8 +9,8 @@ export async function POST(): Promise<NextResponse> {
 
   response.cookies.set(AUTH_COOKIE_NAME, '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: false,
+    sameSite: 'lax',
     path: '/',
     maxAge: 0,
   });

@@ -61,11 +61,11 @@ describe('TechInventory Public Component Detail', () => {
     });
     cy.get('[data-testid="breadcrumb"]').should('exist');
     cy.get('[data-testid="breadcrumb-home"]').click();
-    cy.url().should('eq', '/');
+    cy.url().should('match', /\/$/);
   });
 
   it('detail page handles invalid component ID', () => {
-    cy.visit('/components/invalid-id-12345');
+    cy.visit('/components/invalid-id-12345', { failOnStatusCode: false });
     cy.get('[data-testid="not-found-message"]').should('exist');
   });
 });

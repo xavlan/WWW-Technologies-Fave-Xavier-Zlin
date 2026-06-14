@@ -13,7 +13,19 @@ export function createApp(): Application {
   app.use(helmet());
   app.use(
     cors({
-      origin: env.CORS_ORIGIN,
+      origin:
+        env.NODE_ENV === 'test'
+          ? (origin, callback) => {
+              if (
+                !origin ||
+                /^https?:\/\/(localhost|127\.0\.0\.1):3000$/.test(origin)
+              ) {
+                callback(null, true);
+              } else {
+                callback(new Error('Not allowed by CORS'));
+              }
+            }
+          : env.CORS_ORIGIN,
       credentials: true,
     }),
   );
