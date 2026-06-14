@@ -18,9 +18,7 @@ export function CompareBar() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2 text-sm font-medium">
           <Scale className="h-4 w-4 text-primary" />
-          <span>
-            {items.length}/2 selected for comparison
-          </span>
+          <span>{items.length}/2 selected for comparison</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

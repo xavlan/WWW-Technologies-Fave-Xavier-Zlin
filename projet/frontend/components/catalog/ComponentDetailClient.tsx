@@ -97,7 +97,9 @@ export function ComponentDetailClient({
               >
                 <div>
                   <p className="font-medium">{comp.name}</p>
-                  <p className="text-xs text-muted-foreground">{comp.brand} - ${comp.price}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {comp.brand} - ${comp.price}
+                  </p>
                 </div>
               </Button>
             ))}

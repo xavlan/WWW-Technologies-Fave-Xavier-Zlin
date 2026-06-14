@@ -77,18 +77,11 @@ export const componentsApi = {
   create: (data: CreateComponentDto) => api.post<ApiResponse<Component>>('/components', data),
   update: (id: string, data: UpdateComponentDto) =>
     api.put<ApiResponse<Component>>(`/components/${id}`, data),
-  delete: (id: string) =>
-    api.delete<ApiResponse<{ message: string }>>(`/components/${id}`),
+  delete: (id: string) => api.delete<ApiResponse<{ message: string }>>(`/components/${id}`),
 };
 
 export const categoriesApi = {
   getAll: () => api.get<ApiResponse<Category[]>>('/categories'),
-  create: (data: { name: string; slug: string; description?: string }) =>
-    api.post<ApiResponse<Category>>('/categories', data),
-  update: (id: string, data: Partial<{ name: string; slug: string; description: string }>) =>
-    api.put<ApiResponse<Category>>(`/categories/${id}`, data),
-  delete: (id: string) =>
-    api.delete<ApiResponse<{ message: string }>>(`/categories/${id}`),
 };
 
 export const adminApi = {

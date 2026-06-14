@@ -119,7 +119,11 @@ export function InventoryPageClient() {
           <h1 className="text-3xl font-bold tracking-tight">Inventory</h1>
           <p className="text-muted-foreground">Manage PC component inventory.</p>
         </div>
-        <Link href="/admin/inventory/new" className={cn(buttonVariants())} data-testid="add-component-button">
+        <Link
+          href="/admin/inventory/new"
+          className={cn(buttonVariants())}
+          data-testid="add-component-button"
+        >
           Add New Component
         </Link>
       </div>
@@ -191,7 +195,10 @@ export function InventoryPageClient() {
                   <TableCell>${component.price}</TableCell>
                   <TableCell>{component.stock}</TableCell>
                   <TableCell>
-                    <StockBadge status={getStockStatus(component.stock)} data-testid="stock-badge" />
+                    <StockBadge
+                      status={getStockStatus(component.stock)}
+                      data-testid="stock-badge"
+                    />
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">

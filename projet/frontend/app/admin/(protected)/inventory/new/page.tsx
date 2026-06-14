@@ -1,5 +1,5 @@
 import { fetchCategories } from '@/lib/api-server';
-import { NewComponentPageClient } from '@/components/admin/NewComponentPageClient';
+import { ComponentFormPageClient } from '@/components/admin/ComponentFormPageClient';
 
 export default async function NewComponentPage() {
   let categories: Awaited<ReturnType<typeof fetchCategories>>['data'] = [];
@@ -11,5 +11,5 @@ export default async function NewComponentPage() {
     categories = [];
   }
 
-  return <NewComponentPageClient categories={categories} />;
+  return <ComponentFormPageClient categories={categories} />;
 }

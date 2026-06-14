@@ -44,7 +44,11 @@ function getPowerConsumption(component: Component | null): number | null {
   return null;
 }
 
-function formatBuildSummary(categories: Category[], selection: BuilderSelection, total: number): string {
+function formatBuildSummary(
+  categories: Category[],
+  selection: BuilderSelection,
+  total: number,
+): string {
   const lines = categories.map((category) => {
     const selected = selection[category.slug];
     return `${category.name}: ${selected?.name ?? 'Not selected'} — $${selected ? Number(selected.price).toFixed(2) : '0.00'}`;

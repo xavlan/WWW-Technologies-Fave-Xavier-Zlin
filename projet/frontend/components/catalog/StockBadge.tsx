@@ -2,10 +2,7 @@ import type { StockStatus } from '@/types/component';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-const stockConfig: Record<
-  StockStatus,
-  { label: string; className: string }
-> = {
+const stockConfig: Record<StockStatus, { label: string; className: string }> = {
   in_stock: {
     label: 'In Stock',
     className: 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100',

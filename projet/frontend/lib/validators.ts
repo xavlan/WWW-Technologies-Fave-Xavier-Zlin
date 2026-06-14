@@ -20,10 +20,7 @@ export const createComponentSchema = z.object({
     .regex(/^[A-Za-z0-9-]{3,20}$/, 'SKU must be 3-20 alphanumeric characters or hyphens'),
   imageUrl: z.union([z.string().url('Invalid URL'), z.literal('')]).optional(),
   categoryId: z.string().min(1, 'Category is required'),
-  specifications: z.record(
-    z.string(),
-    z.union([z.string(), z.number(), z.boolean()]),
-  ),
+  specifications: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
 });
 
 export type CreateComponentFormValues = z.infer<typeof createComponentSchema>;

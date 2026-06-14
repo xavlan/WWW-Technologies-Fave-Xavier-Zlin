@@ -99,9 +99,7 @@ export function ComparePageClient() {
   }
 
   if (!component1 || !component2) {
-    return (
-      <CompareEmptyState error="No components found for this comparison." />
-    );
+    return <CompareEmptyState error="No components found for this comparison." />;
   }
 
   return (

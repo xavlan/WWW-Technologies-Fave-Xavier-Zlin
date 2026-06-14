@@ -55,7 +55,8 @@ export function FavoritesPageClient() {
           <div className="mx-auto max-w-md text-center">
             <h1 className="text-3xl font-bold">No Favorites Yet</h1>
             <p className="mt-2 text-muted-foreground">
-              Start adding components to your favorites by clicking the heart icon on component cards.
+              Start adding components to your favorites by clicking the heart icon on component
+              cards.
             </p>
             <Link href="/components">
               <Button className="mt-6">Browse Components</Button>

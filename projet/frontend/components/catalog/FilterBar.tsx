@@ -121,9 +121,7 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
           <input
             type="checkbox"
             checked={params.inStock === true}
-            onChange={(event) =>
-              onUpdate({ inStock: event.target.checked ? true : undefined })
-            }
+            onChange={(event) => onUpdate({ inStock: event.target.checked ? true : undefined })}
             className="h-4 w-4 rounded border-input"
           />
           In stock only

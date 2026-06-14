@@ -1,5 +1,12 @@
 import type { Component } from '@/types/component';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface ComparisonTableProps {
   component1: Component;
@@ -40,20 +47,36 @@ export function ComparisonTable({ component1, component2 }: ComparisonTableProps
         <TableBody>
           <TableRow>
             <TableCell className="font-medium">Brand</TableCell>
-            <TableCell className={component1.brand !== component2.brand ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
+            <TableCell
+              className={
+                component1.brand !== component2.brand ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''
+              }
+            >
               {component1.brand}
             </TableCell>
-            <TableCell className={component1.brand !== component2.brand ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
+            <TableCell
+              className={
+                component1.brand !== component2.brand ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''
+              }
+            >
               {component2.brand}
             </TableCell>
           </TableRow>
 
           <TableRow>
             <TableCell className="font-medium">Model</TableCell>
-            <TableCell className={component1.model !== component2.model ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
+            <TableCell
+              className={
+                component1.model !== component2.model ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''
+              }
+            >
               {component1.model}
             </TableCell>
-            <TableCell className={component1.model !== component2.model ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''}>
+            <TableCell
+              className={
+                component1.model !== component2.model ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''
+              }
+            >
               {component2.model}
             </TableCell>
           </TableRow>

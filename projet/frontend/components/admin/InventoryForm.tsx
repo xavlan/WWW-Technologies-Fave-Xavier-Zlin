@@ -62,8 +62,7 @@ export function InventoryForm({
   const specifications = watch('specifications');
   const imageUrl = watch('imageUrl');
   const categoryItems = useMemo(
-    () =>
-      Object.fromEntries(categories.map((category) => [category.id, category.name])),
+    () => Object.fromEntries(categories.map((category) => [category.id, category.name])),
     [categories],
   );
 
@@ -100,7 +99,13 @@ export function InventoryForm({
 
         <div className="space-y-2">
           <Label htmlFor="price">Price ($)</Label>
-          <Input id="price" type="number" step="0.01" min="0" {...register('price', { valueAsNumber: true })} />
+          <Input
+            id="price"
+            type="number"
+            step="0.01"
+            min="0"
+            {...register('price', { valueAsNumber: true })}
+          />
           {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
         </div>
 
@@ -132,9 +137,7 @@ export function InventoryForm({
                   data-testid="category-select"
                 >
                   <SelectValue placeholder="Select a category">
-                    {(value) =>
-                      categories.find((category) => category.id === value)?.name ?? null
-                    }
+                    {(value) => categories.find((category) => category.id === value)?.name ?? null}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -161,9 +164,7 @@ export function InventoryForm({
         <div className="space-y-2 md:col-span-2">
           <Label htmlFor="imageUrl">Image URL</Label>
           <Input id="imageUrl" placeholder="https://..." {...register('imageUrl')} />
-          {errors.imageUrl && (
-            <p className="text-sm text-destructive">{errors.imageUrl.message}</p>
-          )}
+          {errors.imageUrl && <p className="text-sm text-destructive">{errors.imageUrl.message}</p>}
           <div className="relative mt-2 aspect-video max-w-sm overflow-hidden rounded-lg border bg-muted">
             <ComponentImage
               src={imageUrl || null}

@@ -54,11 +54,7 @@ export function Header() {
             </Button>
           </Link>
           <Link href={compareHref} aria-label="Compare components">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="relative gap-1.5 text-muted-foreground"
-            >
+            <Button variant="ghost" size="sm" className="relative gap-1.5 text-muted-foreground">
               <Scale className="h-4 w-4" />
               {compareItems.length > 0 && (
                 <Badge variant="secondary" className="h-5 min-w-5 px-1 text-xs">
@@ -69,7 +65,10 @@ export function Header() {
           </Link>
           <Link
             href="/admin/login"
-            className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'text-muted-foreground')}
+            className={cn(
+              buttonVariants({ variant: 'ghost', size: 'sm' }),
+              'text-muted-foreground',
+            )}
           >
             Admin
           </Link>

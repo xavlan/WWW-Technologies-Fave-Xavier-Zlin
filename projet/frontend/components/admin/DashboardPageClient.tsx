@@ -55,11 +55,7 @@ export function DashboardPageClient() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatsCard title="Total Components" value={stats.totalComponents} icon={Package} />
-        <StatsCard
-          title="Total Value"
-          value={`$${stats.totalInventoryValue}`}
-          icon={DollarSign}
-        />
+        <StatsCard title="Total Value" value={`$${stats.totalInventoryValue}`} icon={DollarSign} />
         <StatsCard
           title="Low Stock Items"
           value={stats.lowStockCount}
@@ -77,7 +73,10 @@ export function DashboardPageClient() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">Low Stock Alerts</h2>
-          <Link href="/admin/inventory" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+          <Link
+            href="/admin/inventory"
+            className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+          >
             View inventory
           </Link>
         </div>

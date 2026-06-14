@@ -6,22 +6,13 @@ import { Footer } from '@/components/layout/Footer';
 
 import { CompareBar } from '@/components/layout/CompareBar';
 
-
-
 export default function PublicLayout({
-
   children,
-
 }: Readonly<{
-
   children: React.ReactNode;
-
 }>) {
-
   return (
-
     <>
-
       <Header />
 
       <main className="flex-1">{children}</main>
@@ -29,14 +20,8 @@ export default function PublicLayout({
       <Footer />
 
       <CompareBar />
-
     </>
-
   );
-
 }
 
-
-
 export { Link };
-

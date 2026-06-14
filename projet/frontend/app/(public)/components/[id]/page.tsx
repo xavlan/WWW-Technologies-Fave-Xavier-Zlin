@@ -82,9 +82,7 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
           <div>
             <div className="mb-3 flex flex-wrap gap-2">
               <Badge variant="outline">{component.brand}</Badge>
-              {component.category && (
-                <Badge variant="secondary">{component.category.name}</Badge>
-              )}
+              {component.category && <Badge variant="secondary">{component.category.name}</Badge>}
               <StockBadge status={stockStatus} />
             </div>
             <h1 className="text-3xl font-bold tracking-tight">{component.name}</h1>
@@ -106,7 +104,11 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
             <p className="leading-relaxed text-muted-foreground">{component.description}</p>
           </div>
 
-          <ComponentDetailClient componentId={component.id} componentName={component.name} categorySlug={component.category?.slug} />
+          <ComponentDetailClient
+            componentId={component.id}
+            componentName={component.name}
+            categorySlug={component.category?.slug}
+          />
 
           <Link href="/components" className={cn(buttonVariants({ variant: 'outline' }))}>
             Back to catalog

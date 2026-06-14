@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { fetchCategories, fetchComponentById } from '@/lib/api-server';
-import { EditComponentPageClient } from '@/components/admin/EditComponentPageClient';
+import { ComponentFormPageClient } from '@/components/admin/ComponentFormPageClient';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Suspense } from 'react';
 
@@ -28,7 +28,7 @@ async function EditComponentContent({ id }: { id: string }) {
     notFound();
   }
 
-  return <EditComponentPageClient categories={categories} component={component} />;
+  return <ComponentFormPageClient categories={categories} component={component} />;
 }
 
 export default async function EditComponentPage({ params }: EditComponentPageProps) {

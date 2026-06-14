@@ -1,10 +1,9 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authApi } from '@/lib/api';
-import { useAuthStore } from '@/stores/authStore';
 import type { User } from '@/types/user';
 
 interface AuthContextValue {
@@ -13,65 +12,62 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const user = useAuthStore((state) => state.user);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const isLoading = useAuthStore((state) => state.isLoading);
-  const setUser = useAuthStore((state) => state.setUser);
-  const setLoading = useAuthStore((state) => state.setLoading);
-  const reset = useAuthStore((state) => state.reset);
-
-  const refreshUser = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await authApi.me();
-      setUser(response.data.data ?? null);
-    } catch {
-      reset();
-    }
-  }, [reset, setLoading, setUser]);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    void refreshUser();
-  }, [refreshUser]);
+    let cancelled = false;
 
-  const login = useCallback(
-    async (email: string, password: string) => {
-      const response = await authApi.login(email, password);
-      const loggedInUser = response.data.data?.user as User | undefined;
+    authApi
+      .me()
+      .then((res) => {
+        if (!cancelled) setUser(res.data.data ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) setUser(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
 
-      if (!loggedInUser) {
-        throw new Error('Invalid login response');
-      }
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-      setUser(loggedInUser);
-      toast.success('Welcome back!');
-    },
-    [setUser],
-  );
+  const login = useCallback(async (email: string, password: string) => {
+    const response = await authApi.login(email, password);
+    const loggedInUser = response.data.data?.user as User | undefined;
+
+    if (!loggedInUser) {
+      throw new Error('Login failed');
+    }
+
+    setUser(loggedInUser);
+    toast.success('Logged in');
+  }, []);
 
   const logout = useCallback(async () => {
     await authApi.logout();
-    reset();
-    toast.success('Logged out successfully');
+    setUser(null);
+    toast.success('Logged out');
     router.push('/admin/login');
-  }, [reset, router]);
+  }, [router]);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated,
+        isAuthenticated: user !== null,
         isLoading,
         login,
         logout,
-        refreshUser,
       }}
     >
       {children}
@@ -83,7 +79,7 @@ export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth must be used inside AuthProvider');
   }
 
   return context;

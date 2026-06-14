@@ -15,12 +15,8 @@ export function useCatalogParams() {
     return {
       search: searchParams.get('search') ?? undefined,
       category: searchParams.get('category') ?? undefined,
-      minPrice: searchParams.get('minPrice')
-        ? Number(searchParams.get('minPrice'))
-        : undefined,
-      maxPrice: searchParams.get('maxPrice')
-        ? Number(searchParams.get('maxPrice'))
-        : undefined,
+      minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
+      maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
       inStock: inStockParam === null ? undefined : inStockParam === 'true',
       sortBy: (searchParams.get('sortBy') as ComponentQueryParams['sortBy']) ?? 'createdAt',
       order: (searchParams.get('order') as ComponentQueryParams['order']) ?? 'desc',

@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { AUTH_COOKIE_NAME, getApiBaseUrl } from '@/lib/auth';
 
-async function proxyRequest(
-  request: NextRequest,
-  pathSegments: string[],
-): Promise<NextResponse> {
+async function proxyRequest(request: NextRequest, pathSegments: string[]): Promise<NextResponse> {
   const pathname = pathSegments.join('/');
   const targetUrl = new URL(`${getApiBaseUrl()}/${pathname}`);
 
