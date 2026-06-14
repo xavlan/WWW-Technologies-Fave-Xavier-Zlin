@@ -119,7 +119,7 @@ export function InventoryPageClient() {
           <h1 className="text-3xl font-bold tracking-tight">Inventory</h1>
           <p className="text-muted-foreground">Manage PC component inventory.</p>
         </div>
-        <Link href="/admin/inventory/new" className={cn(buttonVariants())}>
+        <Link href="/admin/inventory/new" className={cn(buttonVariants())} data-testid="add-component-button">
           Add New Component
         </Link>
       </div>
@@ -133,6 +133,7 @@ export function InventoryPageClient() {
             setPage(1);
           }}
           className="sm:max-w-xs"
+          data-testid="inventory-search"
         />
         <Select
           value={categoryFilter}
@@ -140,8 +141,12 @@ export function InventoryPageClient() {
             setCategoryFilter(value ?? 'all');
             setPage(1);
           }}
+          items={[
+            { value: 'all', label: 'All categories' },
+            ...categories.map((category) => ({ value: category.slug, label: category.name })),
+          ]}
         >
-          <SelectTrigger className="sm:w-48">
+          <SelectTrigger className="sm:w-48" data-testid="category-filter">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
@@ -162,7 +167,7 @@ export function InventoryPageClient() {
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border">
+        <div className="rounded-xl border" data-testid="inventory-table">
           <Table>
             <TableHeader>
               <TableRow>
@@ -178,7 +183,7 @@ export function InventoryPageClient() {
             </TableHeader>
             <TableBody>
               {components.map((component) => (
-                <TableRow key={component.id}>
+                <TableRow key={component.id} data-testid="inventory-row">
                   <TableCell className="font-medium">{component.name}</TableCell>
                   <TableCell>{component.brand}</TableCell>
                   <TableCell>{component.category?.name ?? '—'}</TableCell>
@@ -186,7 +191,7 @@ export function InventoryPageClient() {
                   <TableCell>${component.price}</TableCell>
                   <TableCell>{component.stock}</TableCell>
                   <TableCell>
-                    <StockBadge status={getStockStatus(component.stock)} />
+                    <StockBadge status={getStockStatus(component.stock)} data-testid="stock-badge" />
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
@@ -195,6 +200,7 @@ export function InventoryPageClient() {
                         size="icon"
                         onClick={() => router.push(`/admin/inventory/${component.id}/edit`)}
                         aria-label={`Edit ${component.name}`}
+                        data-testid="edit-button"
                       >
                         <Pencil className="h-4 w-4" />
                       </Button>
@@ -203,6 +209,7 @@ export function InventoryPageClient() {
                         size="icon"
                         onClick={() => setDeleteTarget(component)}
                         aria-label={`Delete ${component.name}`}
+                        data-testid="delete-button"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>

@@ -1,5 +1,6 @@
 import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { getComponentImageUrl } from './component-images';
 
 const prisma = new PrismaClient();
 
@@ -529,14 +530,18 @@ async function main(): Promise<void> {
 
     const { categorySlug, ...componentData } = component; // eslint-disable-line @typescript-eslint/no-unused-vars
 
+    const imageUrl = getComponentImageUrl(component.sku);
+
     await prisma.component.upsert({
       where: { sku: component.sku },
       update: {
         ...componentData,
+        imageUrl,
         categoryId,
       },
       create: {
         ...componentData,
+        imageUrl,
         categoryId,
       },
     });

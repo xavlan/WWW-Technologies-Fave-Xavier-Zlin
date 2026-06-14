@@ -6,7 +6,7 @@ export interface Component {
   brand: string;
   model: string;
   description: string;
-  price: string;
+  price: number;
   stock: number;
   sku: string;
   imageUrl: string | null;

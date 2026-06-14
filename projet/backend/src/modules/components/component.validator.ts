@@ -15,11 +15,20 @@ export const createComponentSchema = z.object({
   sku: z
     .string()
     .trim()
-    .regex(
-      /^[A-Z0-9-]{3,20}$/,
-      'SKU must be 3-20 uppercase alphanumeric characters or hyphens',
+    .transform((value) => value.toUpperCase())
+    .pipe(
+      z
+        .string()
+        .regex(
+          /^[A-Z0-9-]{3,20}$/,
+          'SKU must be 3-20 uppercase alphanumeric characters or hyphens',
+        ),
     ),
-  imageUrl: z.string().url('Invalid image URL').optional().nullable(),
+  imageUrl: z
+    .union([z.string().url('Invalid image URL'), z.literal('')])
+    .optional()
+    .nullable()
+    .transform((value) => (value ? value : null)),
   specifications: specificationsSchema,
   categoryId: z.string().min(1, 'Category is required'),
 });

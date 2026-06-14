@@ -16,7 +16,8 @@ export const createComponentSchema = z.object({
   stock: z.number({ error: 'Stock is required' }).int().min(0, 'Stock cannot be negative'),
   sku: z
     .string()
-    .regex(/^[A-Z0-9-]{3,20}$/, 'SKU must be 3-20 uppercase alphanumeric characters or hyphens'),
+    .trim()
+    .regex(/^[A-Za-z0-9-]{3,20}$/, 'SKU must be 3-20 alphanumeric characters or hyphens'),
   imageUrl: z.union([z.string().url('Invalid URL'), z.literal('')]).optional(),
   categoryId: z.string().min(1, 'Category is required'),
   specifications: z.record(

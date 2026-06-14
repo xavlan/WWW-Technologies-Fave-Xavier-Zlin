@@ -43,9 +43,14 @@ export function CatalogClient({ categories }: CatalogClientProps) {
 
         setComponents(response.data.data);
         setMeta(response.data.meta);
-      } catch {
+      } catch (error: unknown) {
         if (isMounted) {
-          toast.error('Failed to load components');
+          const err = error as { response?: { status?: number } };
+          if (err.response?.status === 429) {
+            toast.error('Too many requests. Please wait a moment and try again.');
+          } else {
+            toast.error('Failed to load components');
+          }
           setComponents([]);
         }
       } finally {

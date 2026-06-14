@@ -23,13 +23,14 @@ const stockConfig: Record<
 interface StockBadgeProps {
   status: StockStatus;
   className?: string;
+  'data-testid'?: string;
 }
 
-export function StockBadge({ status, className }: StockBadgeProps) {
+export function StockBadge({ status, className, 'data-testid': dataTestId }: StockBadgeProps) {
   const config = stockConfig[status];
 
   return (
-    <Badge variant="secondary" className={cn(config.className, className)}>
+    <Badge variant="secondary" className={cn(config.className, className)} data-testid={dataTestId}>
       {config.label}
     </Badge>
   );

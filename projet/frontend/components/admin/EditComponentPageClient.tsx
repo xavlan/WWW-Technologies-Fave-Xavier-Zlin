@@ -26,13 +26,29 @@ export function EditComponentPageClient({
 
     try {
       await componentsApi.update(component.id, {
-        ...data,
-        imageUrl: data.imageUrl || undefined,
+        name: data.name,
+        brand: data.brand,
+        model: data.model,
+        description: data.description,
+        price: data.price,
+        stock: data.stock,
+        sku: data.sku.toUpperCase(),
+        categoryId: data.categoryId,
+        imageUrl: data.imageUrl?.trim() ? data.imageUrl.trim() : undefined,
+        specifications: data.specifications ?? {},
       });
       toast.success('Component updated successfully');
       router.push('/admin/inventory');
-    } catch {
-      toast.error('Failed to update component');
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { error?: { message?: string; code?: string } } } };
+      const message = err.response?.data?.error?.message || 'Failed to update component';
+      const code = err.response?.data?.error?.code;
+      
+      if (code === 'SKU_CONFLICT') {
+        toast.error('SKU already exists. Please use a different SKU.');
+      } else {
+        toast.error(message);
+      }
     } finally {
       setIsSubmitting(false);
     }

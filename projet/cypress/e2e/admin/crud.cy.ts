@@ -16,18 +16,21 @@ describe('TechInventory Admin CRUD', () => {
   });
 
   it('admin can create a new component', () => {
+    const uniqueSku = `TEST-${Date.now()}`;
+
     cy.visit('/admin/inventory/new');
     cy.get('input[name="name"]').type('Test Component');
     cy.get('input[name="brand"]').type('Test Brand');
     cy.get('input[name="model"]').type('TEST-001');
     cy.get('textarea[name="description"]').type('Test description for component');
-    cy.get('input[name="price"]').type('99.99');
-    cy.get('input[name="stock"]').type('10');
-    cy.get('input[name="sku"]').type('TEST-SKU-001');
-    cy.get('select[name="categoryId"]').select('1');
+    cy.get('input[name="price"]').clear().type('99.99');
+    cy.get('input[name="stock"]').clear().type('10');
+    cy.get('input[name="sku"]').type(uniqueSku);
+    cy.get('[data-testid="category-select"]').click();
+    cy.contains('[role="option"]', 'CPU').click();
     cy.get('button[type="submit"]').click();
     cy.url().should('include', '/admin/inventory');
-    cy.get('[data-testid="success-toast"]').should('exist');
+    cy.contains('Component created successfully').should('be.visible');
   });
 
   it('form validation shows errors for invalid input', () => {
@@ -46,7 +49,7 @@ describe('TechInventory Admin CRUD', () => {
     cy.get('input[name="price"]').clear().type('149.99');
     cy.get('button[type="submit"]').click();
     cy.url().should('include', '/admin/inventory');
-    cy.get('[data-testid="success-toast"]').should('exist');
+    cy.contains('Component updated successfully').should('be.visible');
   });
 
   it('admin can delete a component', () => {
@@ -56,7 +59,7 @@ describe('TechInventory Admin CRUD', () => {
     });
     cy.get('[data-testid="confirm-delete-dialog"]').should('exist');
     cy.get('[data-testid="confirm-delete-button"]').click();
-    cy.get('[data-testid="success-toast"]').should('exist');
+    cy.contains('Component deleted').should('be.visible');
   });
 
   it('delete operation shows confirmation dialog', () => {
@@ -78,7 +81,8 @@ describe('TechInventory Admin CRUD', () => {
   it('inventory table has category filter', () => {
     cy.visit('/admin/inventory');
     cy.get('[data-testid="category-filter"]').should('exist');
-    cy.get('[data-testid="category-filter"]').select('CPU');
+    cy.get('[data-testid="category-filter"]').click();
+    cy.contains('[role="option"]', 'CPU').click();
   });
 
   it('stock badge shows correct color coding', () => {
@@ -89,6 +93,6 @@ describe('TechInventory Admin CRUD', () => {
   it('pagination works in inventory table', () => {
     cy.visit('/admin/inventory');
     cy.get('[data-testid="pagination-next"]').click();
-    cy.url().should('include', 'page=2');
+    cy.contains('Page 2 of').should('be.visible');
   });
 });

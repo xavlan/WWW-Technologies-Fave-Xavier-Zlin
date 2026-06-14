@@ -21,13 +21,33 @@ export function NewComponentPageClient({ categories }: NewComponentPageClientPro
 
     try {
       await componentsApi.create({
-        ...data,
-        imageUrl: data.imageUrl || undefined,
+        name: data.name,
+        brand: data.brand,
+        model: data.model,
+        description: data.description,
+        price: data.price,
+        stock: data.stock,
+        sku: data.sku.toUpperCase(),
+        categoryId: data.categoryId,
+        imageUrl: data.imageUrl?.trim() ? data.imageUrl.trim() : undefined,
+        specifications: data.specifications ?? {},
       });
       toast.success('Component created successfully');
       router.push('/admin/inventory');
-    } catch {
-      toast.error('Failed to create component');
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { data?: { error?: { message?: string; code?: string; details?: unknown } } };
+      };
+      const message = err.response?.data?.error?.message || 'Failed to create component';
+      const code = err.response?.data?.error?.code;
+
+      if (code === 'SKU_CONFLICT') {
+        toast.error('SKU already exists. Please use a unique SKU.');
+      } else if (code === 'VALIDATION_ERROR') {
+        toast.error(message);
+      } else {
+        toast.error(message);
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { getStockStatus } from '@/types/component';
+import { ComponentDetailClient } from '@/components/catalog/ComponentDetailClient';
 
 interface ComponentDetailPageProps {
   params: Promise<{ id: string }>;
@@ -104,6 +105,8 @@ export default async function ComponentDetailPage({ params }: ComponentDetailPag
             <h2 className="mb-2 text-lg font-semibold">Description</h2>
             <p className="leading-relaxed text-muted-foreground">{component.description}</p>
           </div>
+
+          <ComponentDetailClient componentId={component.id} componentName={component.name} categorySlug={component.category?.slug} />
 
           <Link href="/components" className={cn(buttonVariants({ variant: 'outline' }))}>
             Back to catalog

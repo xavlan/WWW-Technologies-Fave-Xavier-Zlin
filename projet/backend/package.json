@@ -14,6 +14,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:prepare": "npm run db:generate && npm run db:push",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",

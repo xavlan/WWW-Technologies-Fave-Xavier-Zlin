@@ -1,6 +1,7 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
+import { useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SpecsKeyValueBuilder } from '@/components/admin/SpecsKeyValueBuilder';
+import { ComponentImage } from '@/components/catalog/ComponentImage';
 import { cn } from '@/lib/utils';
 import { createComponentSchema, type CreateComponentFormValues } from '@/lib/validators';
 import type { Category } from '@/types/category';
@@ -39,6 +41,7 @@ export function InventoryForm({
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<CreateComponentFormValues>({
     resolver: zodResolver(createComponentSchema),
@@ -57,7 +60,12 @@ export function InventoryForm({
   });
 
   const specifications = watch('specifications');
-  const categoryId = watch('categoryId');
+  const imageUrl = watch('imageUrl');
+  const categoryItems = useMemo(
+    () =>
+      Object.fromEntries(categories.map((category) => [category.id, category.name])),
+    [categories],
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-3xl space-y-6">
@@ -65,7 +73,11 @@ export function InventoryForm({
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" {...register('name')} />
-          {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-sm text-destructive" data-testid="name-error">
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -99,26 +111,48 @@ export function InventoryForm({
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="category">Category</Label>
-          <Select
-            value={categoryId}
-            onValueChange={(value) => {
-              if (value) {
-                setValue('categoryId', value, { shouldValidate: true });
-              }
-            }}
-          >
-            <SelectTrigger id="category" className="w-full">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Label htmlFor="category">Category *</Label>
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value || null}
+                onValueChange={(value) => {
+                  if (value) {
+                    field.onChange(value);
+                  }
+                }}
+                items={categoryItems}
+              >
+                <SelectTrigger
+                  id="category"
+                  className="w-full"
+                  aria-label="Category"
+                  data-testid="category-select"
+                >
+                  <SelectValue placeholder="Select a category">
+                    {(value) =>
+                      categories.find((category) => category.id === value)?.name ?? null
+                    }
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.length > 0 ? (
+                    categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="__none__" disabled>
+                      No categories available
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.categoryId && (
             <p className="text-sm text-destructive">{errors.categoryId.message}</p>
           )}
@@ -130,6 +164,17 @@ export function InventoryForm({
           {errors.imageUrl && (
             <p className="text-sm text-destructive">{errors.imageUrl.message}</p>
           )}
+          <div className="relative mt-2 aspect-video max-w-sm overflow-hidden rounded-lg border bg-muted">
+            <ComponentImage
+              src={imageUrl || null}
+              alt="Component preview"
+              fill
+              className="h-full w-full"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Paste an image URL or leave empty to use a placeholder.
+          </p>
         </div>
 
         <div className="space-y-2 md:col-span-2">

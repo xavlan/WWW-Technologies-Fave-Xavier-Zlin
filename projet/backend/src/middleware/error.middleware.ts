@@ -6,6 +6,7 @@ import {
   AppError,
   ConflictError,
   NotFoundError,
+  ValidationError,
 } from '../utils/errors';
 
 function logError(err: Error): void {
@@ -70,12 +71,19 @@ export function errorHandler(
 
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === 'P2002') {
-      const conflict = new ConflictError('A record with this value already exists');
+      const target = err.meta?.target;
+      const fields = Array.isArray(target) ? target : target ? [String(target)] : [];
+      const isSkuConflict = fields.some((field) => field === 'sku' || field.includes('sku'));
+
+      const conflict = isSkuConflict
+        ? new ConflictError('SKU already exists', 'SKU_CONFLICT')
+        : new ConflictError('A record with this value already exists', 'CONFLICT');
+
       res.status(conflict.statusCode).json({
         success: false,
         error: {
           message: conflict.message,
-          code: 'CONFLICT',
+          code: conflict.code ?? 'CONFLICT',
         },
       });
       return;
@@ -88,6 +96,18 @@ export function errorHandler(
         error: {
           message: notFound.message,
           code: 'NOT_FOUND',
+        },
+      });
+      return;
+    }
+
+    if (err.code === 'P2003') {
+      const validation = new ValidationError('Invalid reference — check category and related fields');
+      res.status(validation.statusCode).json({
+        success: false,
+        error: {
+          message: validation.message,
+          code: 'VALIDATION_ERROR',
         },
       });
       return;

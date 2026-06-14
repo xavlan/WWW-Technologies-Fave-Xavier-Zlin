@@ -1,55 +1,88 @@
 'use client';
 
-import Image from 'next/image';
+
+
 import { useState } from 'react';
+
+import Image from 'next/image';
+
 import { Cpu } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 
+
+
 interface ComponentImageProps {
+
   src?: string | null;
+
   alt: string;
+
   className?: string;
+
   fill?: boolean;
+
   width?: number;
+
   height?: number;
+
   priority?: boolean;
+
 }
+
+
 
 export function ComponentImage({
+
   src,
+
   alt,
+
   className,
+
   fill = false,
+
   width,
+
   height,
+
   priority = false,
+
 }: ComponentImageProps) {
+
   const [hasError, setHasError] = useState(false);
 
-  if (!src || hasError) {
-    return (
-      <div
-        className={cn(
-          'flex items-center justify-center bg-muted text-muted-foreground',
-          className,
-        )}
-      >
-        <Cpu className="h-10 w-10 opacity-50" />
-      </div>
-    );
-  }
+  const placeholderUrl = `https://placehold.co/400x300/e2e8f0/64748b?text=${encodeURIComponent(alt.slice(0, 20))}`;
+
+  const imageSrc = !src || hasError ? placeholderUrl : src;
+
+
 
   return (
+
     <Image
-      src={src}
+
+      src={imageSrc}
+
       alt={alt}
+
       className={cn('object-cover', className)}
+
       fill={fill}
-      width={fill ? undefined : width}
-      height={fill ? undefined : height}
+
+      width={fill ? undefined : width ?? 400}
+
+      height={fill ? undefined : height ?? 300}
+
       priority={priority}
+
       onError={() => setHasError(true)}
+
       unoptimized
+
     />
+
   );
+
 }
+

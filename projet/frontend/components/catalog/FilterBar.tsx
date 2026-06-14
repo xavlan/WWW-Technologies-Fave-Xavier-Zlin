@@ -30,6 +30,10 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
           onValueChange={(value) =>
             onUpdate({ category: !value || value === 'all' ? undefined : value })
           }
+          items={[
+            { value: 'all', label: 'All categories' },
+            ...categories.map((category) => ({ value: category.slug, label: category.name })),
+          ]}
         >
           <SelectTrigger id="category-filter" className="w-full">
             <SelectValue placeholder="All categories" />
@@ -89,6 +93,14 @@ export function FilterBar({ categories, params, onUpdate, onReset }: FilterBarPr
             ];
             onUpdate({ sortBy, order });
           }}
+          items={[
+            { value: 'createdAt-desc', label: 'Newest first' },
+            { value: 'createdAt-asc', label: 'Oldest first' },
+            { value: 'price-asc', label: 'Price: Low to High' },
+            { value: 'price-desc', label: 'Price: High to Low' },
+            { value: 'name-asc', label: 'Name: A to Z' },
+            { value: 'name-desc', label: 'Name: Z to A' },
+          ]}
         >
           <SelectTrigger id="sort-by" className="w-full">
             <SelectValue placeholder="Sort" />

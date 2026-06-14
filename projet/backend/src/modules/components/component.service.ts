@@ -1,4 +1,5 @@
-import { ConflictError } from '../../utils/errors';
+import { prisma } from '../../config/database';
+import { ConflictError, ValidationError } from '../../utils/errors';
 import { buildPaginationMeta, parsePagination } from '../../utils/pagination';
 import { serializeComponent, serializeComponents } from '../../utils/serialize';
 import { componentRepository } from './component.repository';
@@ -42,6 +43,18 @@ export class ComponentService {
   }
 
   async create(data: CreateComponentInput) {
+    const category = await prisma.category.findUnique({
+      where: { id: data.categoryId },
+      select: { id: true },
+    });
+
+    if (!category) {
+      throw new ValidationError('Invalid category selected', {
+        field: 'categoryId',
+        message: 'Category does not exist',
+      });
+    }
+
     const skuExists = await this.repository.checkSkuExists(data.sku);
 
     if (skuExists) {

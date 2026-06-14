@@ -29,6 +29,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
         variant="outline"
         disabled={meta.page >= meta.totalPages}
         onClick={() => onPageChange(meta.page + 1)}
+        data-testid="pagination-next"
       >
         Next
       </Button>
