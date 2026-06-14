@@ -223,9 +223,18 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          npm start --prefix backend &
+          (
+            DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test \
+            JWT_SECRET=test-secret-key-for-testing-min-32-chars \
+            JWT_EXPIRES_IN=1h \
+            PORT=3001 \
+            NODE_ENV=test \
+            CORS_ORIGIN=http://localhost:3000 \
+            npm start --prefix backend
+          ) &
           BACKEND_PID=$!
-          npm start --prefix frontend &
+
+          PORT=3000 npm start --prefix frontend &
           FRONTEND_PID=$!
 
           cleanup() {
@@ -237,14 +246,6 @@ jobs:
           npx cypress run
         working-directory: projet
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
-          JWT_SECRET: test-secret-key-for-testing-min-32-chars
-          JWT_EXPIRES_IN: 1h
-          PORT: 3001
-          NODE_ENV: test
-          CORS_ORIGIN: http://localhost:3000
-          NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
-          NEXT_PUBLIC_APP_NAME: TechInventory
           CYPRESS_baseUrl: http://localhost:3000
           CYPRESS_apiUrl: http://localhost:3001/api/v1
 
