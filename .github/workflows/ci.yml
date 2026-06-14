@@ -3,8 +3,18 @@ name: CI
 on:
   push:
     branches: ['**']
+    paths:
+      - 'projet/**'
+      - '.github/workflows/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'projet/**'
+      - '.github/workflows/**'
+
+defaults:
+  run:
+    working-directory: projet
 
 jobs:
   lint:
@@ -21,34 +31,28 @@ jobs:
           node-version: '20'
 
       - name: Install backend dependencies
-        run: |
-          cd backend
-          npm ci
+        run: npm ci
+        working-directory: projet/backend
 
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        run: npm ci
+        working-directory: projet/frontend
 
       - name: Lint backend
-        run: |
-          cd backend
-          npm run lint
+        run: npm run lint
+        working-directory: projet/backend
 
       - name: Lint frontend
-        run: |
-          cd frontend
-          npm run lint
+        run: npm run lint
+        working-directory: projet/frontend
 
       - name: Type check backend
-        run: |
-          cd backend
-          npm run typecheck
+        run: npm run typecheck
+        working-directory: projet/backend
 
       - name: Type check frontend
-        run: |
-          cd frontend
-          npm run typecheck
+        run: npm run typecheck
+        working-directory: projet/frontend
 
   test-backend:
     name: Test Backend
@@ -79,42 +83,44 @@ jobs:
           node-version: '20'
 
       - name: Install backend dependencies
-        run: |
-          cd backend
-          npm ci
+        run: npm ci
+        working-directory: projet/backend
 
       - name: Setup test database
         run: |
-          cd backend
           echo "DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test" > .env.test
           echo "JWT_SECRET=test-secret-key-for-testing-min-32-chars" >> .env.test
           echo "JWT_EXPIRES_IN=1h" >> .env.test
           echo "PORT=3001" >> .env.test
           echo "NODE_ENV=test" >> .env.test
           echo "CORS_ORIGIN=http://localhost:3000" >> .env.test
+        working-directory: projet/backend
 
       - name: Generate Prisma client
-        run: |
-          cd backend
-          npx prisma generate
+        run: npx prisma generate
+        working-directory: projet/backend
 
       - name: Run Prisma migrations
-        run: |
-          cd backend
-          npx prisma migrate deploy
+        run: npx prisma migrate deploy
+        working-directory: projet/backend
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
 
       - name: Run Jest tests with coverage
-        run: |
-          cd backend
-          npm run test:coverage
+        run: npm run test:coverage
+        working-directory: projet/backend
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
+          JWT_SECRET: test-secret-key-for-testing-min-32-chars
+          JWT_EXPIRES_IN: 1h
+          CORS_ORIGIN: http://localhost:3000
+          NODE_ENV: test
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: backend-coverage
-          path: backend/coverage
+          path: projet/backend/coverage
 
   test-frontend:
     name: Test Frontend
@@ -130,14 +136,12 @@ jobs:
           node-version: '20'
 
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        run: npm ci
+        working-directory: projet/frontend
 
       - name: Build Next.js
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build
+        working-directory: projet/frontend
 
   e2e:
     name: E2E Tests
@@ -169,55 +173,50 @@ jobs:
           node-version: '20'
 
       - name: Install backend dependencies
-        run: |
-          cd backend
-          npm ci
+        run: npm ci
+        working-directory: projet/backend
 
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        run: npm ci
+        working-directory: projet/frontend
 
       - name: Install Cypress dependencies
         run: |
           npm ci
-          cd frontend
           npx cypress install
+        working-directory: projet
 
       - name: Setup test database
         run: |
-          cd backend
           echo "DATABASE_URL=postgresql://test:test@localhost:5432/techinventory_test" > .env.test
           echo "JWT_SECRET=test-secret-key-for-testing-min-32-chars" >> .env.test
           echo "JWT_EXPIRES_IN=1h" >> .env.test
           echo "PORT=3001" >> .env.test
           echo "NODE_ENV=test" >> .env.test
           echo "CORS_ORIGIN=http://localhost:3000" >> .env.test
+        working-directory: projet/backend
 
       - name: Generate Prisma client
-        run: |
-          cd backend
-          npx prisma generate
+        run: npx prisma generate
+        working-directory: projet/backend
 
       - name: Run Prisma migrations
-        run: |
-          cd backend
-          npx prisma migrate deploy
+        run: npx prisma migrate deploy
+        working-directory: projet/backend
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
 
       - name: Seed test database
-        run: |
-          cd backend
-          npm run db:seed
+        run: npm run db:seed
+        working-directory: projet/backend
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
 
       - name: Start backend server
         run: |
-          cd backend
           npm run build
           npm start &
+        working-directory: projet/backend
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/techinventory_test
           JWT_SECRET: test-secret-key-for-testing-min-32-chars
@@ -227,9 +226,8 @@ jobs:
           CORS_ORIGIN: http://localhost:3000
 
       - name: Start frontend dev server
-        run: |
-          cd frontend
-          npm run dev &
+        run: npm run dev &
+        working-directory: projet/frontend
         env:
           NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
           NEXT_PUBLIC_APP_NAME: TechInventory
@@ -238,10 +236,11 @@ jobs:
         run: |
           npx wait-on http://localhost:3001
           npx wait-on http://localhost:3000
+        working-directory: projet
 
       - name: Run Cypress tests
-        run: |
-          npx cypress run
+        run: npx cypress run
+        working-directory: projet
         env:
           CYPRESS_baseUrl: http://localhost:3000
           CYPRESS_apiUrl: http://localhost:3001/api/v1
@@ -251,11 +250,11 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: projet/cypress/screenshots
 
       - name: Upload Cypress videos
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cypress-videos
-          path: cypress/videos
+          path: projet/cypress/videos
