@@ -2,7 +2,7 @@
 
 The backend REST API for TechInventory, built with Express.js, TypeScript, Prisma, and PostgreSQL.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -27,13 +27,13 @@ npm run dev
 
 The API will be available at `http://localhost:3001`
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Node.js v20 or higher
 - PostgreSQL v15 or higher
 - npm v9 or higher
 
-## ⚙️ Environment Variables
+##  Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -57,7 +57,7 @@ RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX=100
 ```
 
-## 📚 API Endpoints
+##  API Endpoints
 
 ### Authentication
 
@@ -494,7 +494,7 @@ Authorization: Bearer <token>
 6. **Token Verification**: Middleware verifies token on protected routes
 7. **User Attachment**: Decoded user info is attached to `req.user`
 
-## 📊 Error Response Format
+##  Error Response Format
 
 All errors follow this format:
 
@@ -517,7 +517,7 @@ All errors follow this format:
 - `CONFLICT` (409): Resource conflict (e.g., duplicate SKU)
 - `INTERNAL_ERROR` (500): Server error
 
-## 🧪 Testing
+##  Testing
 
 ### Unit Tests
 
@@ -576,7 +576,7 @@ See `prisma/schema.prisma` for the complete schema definition.
 - `Category`: Component categories
 - `Component`: PC components with specifications
 
-## 🏗 Architecture
+## Architecture
 
 ### Layered Structure
 
@@ -629,7 +629,7 @@ src/
 - Helmet.js security headers
 - Soft delete for data integrity
 
-## 📦 Deployment
+##  Deployment
 
 ### Render Deployment
 
@@ -653,7 +653,7 @@ npm install && npx prisma generate && npx prisma migrate deploy && npm run build
 npm start
 ```
 
-## 🛠 Scripts
+## Scripts
 
 ```bash
 npm run dev          # Start development server
@@ -670,7 +670,3 @@ npm run db:migrate:deploy # Deploy migrations (production)
 npm run db:seed      # Seed database
 npm run db:studio    # Open Prisma Studio
 ```
-
-## 📝 License
-
-MIT
