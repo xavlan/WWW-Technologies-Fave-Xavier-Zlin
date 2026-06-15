@@ -2,7 +2,7 @@
 
 The Next.js 14+ frontend application for TechInventory, built with TypeScript, Tailwind CSS, and shadcn/ui.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -18,12 +18,12 @@ npm run dev
 
 The application will be available at `http://localhost:3000`
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js v20 or higher
 - npm v9 or higher
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 Create a `.env.local` file in the root directory:
 
@@ -32,7 +32,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
 NEXT_PUBLIC_APP_NAME=TechInventory
 ```
 
-## 📚 Page Structure
+## Page Structure
 
 ### Public Routes
 
@@ -48,7 +48,7 @@ NEXT_PUBLIC_APP_NAME=TechInventory
 - `/admin/inventory/new` - Create new component form
 - `/admin/inventory/[id]/edit` - Edit existing component form
 
-## 🎨 Component Library
+## Component Library
 
 This project uses [shadcn/ui](https://ui.shadcn.com/) for UI components. All components are located in `components/ui/`.
 
@@ -87,7 +87,7 @@ This project uses [shadcn/ui](https://ui.shadcn.com/) for UI components. All com
 - StatsCard - Dashboard statistics card
 - LowStockAlert - Low stock warning component
 
-## 🔐 Authentication
+## Authentication
 
 Authentication is handled via JWT tokens stored in httpOnly cookies.
 
@@ -111,7 +111,7 @@ The API client (`lib/api.ts`) handles:
 - Response interceptor for error handling
 - Automatic redirect on 401 errors
 
-## 🧪 Testing
+## Testing
 
 ### E2E Tests
 
@@ -137,7 +137,7 @@ npx cypress run
 - CRUD operations
 - Dashboard statistics
 
-## 🎯 Design System
+## Design System
 
 ### Color Palette
 
@@ -199,7 +199,7 @@ npm run lint         # Run ESLint
 npm run typecheck    # Run TypeScript type checking
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 frontend/
@@ -240,7 +240,7 @@ frontend/
 └── vercel.json           # Vercel configuration
 ```
 
-## 🔒 Security
+## Security
 
 - JWT-based authentication with httpOnly cookies
 - Protected admin routes via middleware
@@ -248,7 +248,7 @@ frontend/
 - XSS protection via React's built-in escaping
 - CSRF protection via httpOnly cookies
 
-## 🎨 Styling
+## Styling
 
 ### Tailwind CSS
 
@@ -263,7 +263,3 @@ Global styles are in `app/globals.css`. Custom utilities and component styles ar
 - Mobile-first approach
 - Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px)
 - Responsive grid layouts for product cards
-
-## 📝 License
-
-MIT
